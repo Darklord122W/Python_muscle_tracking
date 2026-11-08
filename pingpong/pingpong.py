@@ -2,6 +2,7 @@ from turtle import Screen,Turtle
 from paddleclass import Paddle
 from ballclass import Ball
 import time
+from scoreboard import Scoreboard
 
 
 # t=Turtle()
@@ -35,6 +36,7 @@ if __name__=="__main__":
     Rightp=Paddle(350)
     Leftp=Paddle(-350)
     aball=Ball()
+    score=Scoreboard()
     myscreen.listen()
     myscreen.onkeypress(Rightp.go_up, "Up")     # Up arrow moves the right paddle up
     myscreen.onkeypress(Rightp.go_down, "Down") # Down arrow moves it down
@@ -43,6 +45,22 @@ if __name__=="__main__":
     game_on=True
     while game_on:
         myscreen.update()
+        aball.move()
+        if aball.ycor()>280 or aball.ycor()<-280:
+            aball.bounce_y()
+        if aball.distance(Rightp)<50 and aball.xcor()>320 or aball.distance(Leftp)<50 and aball.xcor()<-320:
+            aball.bounce_x()
 
-    
+# right paddle misses
+        if aball.xcor()>380:
+            aball.reset_p()
+            score.l_point()
+            score.update_scoreboard()
+
+# left paddle misses
+        if aball.xcor()<-380:
+            aball.reset_p()
+            score.r_point()
+            score.update_scoreboard()
+        
     myscreen.exitonclick()
